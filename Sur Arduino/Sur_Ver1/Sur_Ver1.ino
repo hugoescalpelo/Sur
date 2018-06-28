@@ -26,6 +26,12 @@
 //Objects
 
 //Constants
+const int dir1 = 4;
+const int step1 = 5;
+const int dir2 = 6;
+const int step2 = 7;
+const int dir3 = 8;
+const int step3 = 9;
 
 //Variables
 double timeNow (); //Tracks actual time in micros
@@ -36,13 +42,14 @@ void setup()
   Serial.println ("Setting up");
 
   Serial2.begin (9600);//Bluetooth communication
-  Serial2.println ("BT running on port tx/rx 2);
+  Serial2.println ("BT running on port tx/rx 2");
 
   setModes ();//Set the pin inputs and outputs
-  setInitialConditions ();
+  setInitialConditions ();//Set the starting state of pins and things
 
-  positionSensorBegin ();
   testSequence ();
+  positionSensorBegin ();
+  
 
   Serial2.println ("Test sequence finished");
   Serial.println ("Test sequence finished");
