@@ -59,4 +59,19 @@ void testSequence () {
   delay (IBWTT);
 }
 
+void shortestWayToSouth () {
+  diffference = 180 - heading;
+  if (diffference < 0) {
+    compassDirection = RIGHT_DIR;
+  }
+  else {
+    compassDirection = LEFT_DIR;
+  }
+  degreesLeft = abs (diffference);
+}
+
+void setWorkingConditions () {
+  workingCompassTimeStep = WORK_TIME_STEP_COMPASS;
+  workingMotorTimeStep = WORK_TIME_STEP;
+}
 

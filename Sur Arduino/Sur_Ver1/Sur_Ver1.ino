@@ -46,6 +46,9 @@ const bool ON = 1;
 const bool OFF = 0;
 const int TEST_STEPS = 1500;
 const int IBWTT = 250;//In Between Wait Test Time
+const int WORK_TIME_STEP_COMPASS = 3000; //uSeconds
+const int WORK_TIME_STEP = 900; //uSeconds
+const byte BASE_TH = 15; //Degrees
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -63,6 +66,13 @@ int testSteps;
 byte compassSequence = 0;
 
 double AOSensorTime;
+int heading;
+int diffference;
+bool compassDirection;
+int degreesLeft;
+int workingCompassTimeStep, workingMotorTimeStep;
+byte threshold = BASE_TH;
+bool closeEnoughCompass, closeEnoughLeft, closeEnoughRight;
 
 void setup() {
   // Serial Monitor communication
@@ -76,17 +86,11 @@ void setup() {
 
   beginOrientationSensor ();
 
-  //Initialize the sensor
-  if (!bno.begin ()){
-    Serial.println ("Check BNO055 sensor");
-    while (1);
-  }
-
-  delay (1000);
-  
-
+  setWorkingConditions ();
 }
 
 void loop() {
   readAbsoluteOrientationSensor ();
+  shortestWayToSouth ();
+  motorDirective ();
 }

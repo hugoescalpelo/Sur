@@ -62,3 +62,25 @@ void compassStep () {
 
   digitalWrite (COMPASS_PIN [compassSequence], HIGH&runMotor [COMPASS_MOTOR]);
 }
+
+void motorDirective () {
+  if (degreesLeft < threshold ) {
+    closeEnoughLeft = OFF;
+    closeEnoughRight = OFF;
+    closeEnoughCompass = ON;
+  }
+  else if (degreesLeft > threshold && diffference > 0) {
+    closeEnoughLeft = ON;
+    closeEnoughRight = OFF;
+    closeEnoughCompass = ON;
+  }
+  else if (degreesLeft > threshold && diffference < 0) {
+    closeEnoughLeft = OFF;
+    closeEnoughRight = ON;
+    closeEnoughCompass = ON;
+  }
+  setMotor (COMPASS_MOTOR, compassDirection, workingCompassTimeStep, closeEnoughCompass);
+  setMotor (LEFT_MOTOR, 0, workingMotorTimeStep, closeEnoughLeft);
+  setMotor (RIGHT_MOTOR, 0, workingMotorTimeStep, closeEnoughRight);
+}
+

@@ -21,9 +21,10 @@ void readAbsoluteOrientationSensor () {
   if (timeNow > AOSensorTime) {
     //Get values
     imu::Vector <3> euler = bno.getVector (Adafruit_BNO055::VECTOR_EULER);
+    heading = euler.x ();
 
     Serial.print ("X: ");
-    Serial.print (euler.x ());
+    Serial.print (heading);
     Serial.print ("\t\t");
 
     //Calibration routine
