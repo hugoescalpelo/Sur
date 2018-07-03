@@ -15,7 +15,10 @@
    V0.2.1 Test sequence for L motor
    V0.2.2 Test for 3 motors single direction
    V0.3 Merge Absolute orientation sensor code
-
+   V0.4 ShortestWay Added
+   V0.5 Continuous Movement Added
+   V0.6 Sensor compass calibration added
+   
    Team
    Iván Abreu Ochoa
    Malitzin Cortes
@@ -49,6 +52,10 @@ const int IBWTT = 250;//In Between Wait Test Time
 const int WORK_TIME_STEP_COMPASS = 3000; //uSeconds
 const int WORK_TIME_STEP = 900; //uSeconds
 const byte BASE_TH = 15; //Degrees
+const int PIN_S1 = A2;
+const int PIN_S2 = A3;
+const int DETECT_S1 = 500;
+const int DETECT_S2 = 530;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 

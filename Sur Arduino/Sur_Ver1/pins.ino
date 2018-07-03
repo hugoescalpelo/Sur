@@ -10,5 +10,8 @@ void setPinModes () {
   pinMode (COMPASS_PIN [1], OUTPUT);
   pinMode (COMPASS_PIN [2], OUTPUT);
   pinMode (COMPASS_PIN [3], OUTPUT);
+  //SensorPins
+  pinMode (PIN_S1, INPUT);
+  pinMode (PIN_S2, INPUT);
 }
 
