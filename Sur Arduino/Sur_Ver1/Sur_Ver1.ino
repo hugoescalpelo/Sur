@@ -1,7 +1,7 @@
 /*
  * Ivan Abreu Studio.
  * 
- * 15/06/2018
+ * 03/07/2018
  * 
  * This code controls a set of 3 stepper motors, 2 of them are
  * used to turn the head of the system host, the last one to
@@ -12,6 +12,7 @@
  * 
  * Changelog:
  * V0.1 First development
+ * V0.2.1 Test sequence for L motor
  * 
  * Team
  * Iván Abreu Ochoa
@@ -26,42 +27,38 @@
 //Objects
 
 //Constants
-const int dir1 = 4;
-const int step1 = 5;
-const int dir2 = 6;
-const int step2 = 7;
-const int dir3 = 8;
-const int step3 = 9;
+const byte DIR_1 = 4;
+const byte STEP_1 = 5;
+const byte LEFT_MOTOR = 0;
+const byte RIGHT_MOTOR = 1;
+const byte COMPASS_MOTOR = 2
+const bool LEFT_DIR = 0;
+const bool RIGHT_DIR = 1;
+const int TIME_TESTEPS = 1000;
+const bool ON = 1;
+const bool OFF = 0;
+const int TEST_STEPS = 1500;
 
 //Variables
-double timeNow (); //Tracks actual time in micros
+bool dirMotor [] = {0,0,0};
+int stepMotorTime [] = {TIME_TESTEPS,TIME_TESTEPS,TIME_TESTEPS};
+bool runMotor [] = {0,0,0};
+double stepTimeTarget [] = {0,0,0};
+double timeNow;
+bool levelMotor [] = {0,0,0};
 
-void setup() 
-{
-  Serial.begin (2000000);//Serial monitor communication
+void setup() {
+  // Serial Monitor communication
+  Serial.begin (2000000);
   Serial.println ("Setting up");
 
-  Serial2.begin (9600);//Bluetooth communication
-  Serial2.println ("BT running on port tx/rx 2");
-
-  setModes ();//Set the pin inputs and outputs
-  setInitialConditions ();//Set the starting state of pins and things
-
+  setPinModes ();
+  setInitialConditions ();
   testSequence ();
-  positionSensorBegin ();
-  
-
-  Serial2.println ("Test sequence finished");
-  Serial.println ("Test sequence finished");
 
 }
 
-void loop() 
-{
-  timeNow = micros (); //Keep track of time instant
-  runAll (); //An asynchronous sequens that checks the bit bang state of every stepper
-  checkSerial ();//Look up for configuration changes and reports to serial monitor
-  checkBluetooth ();//Look up for configuration changes and reports to Bluetooth
+void loop() {
   // put your main code here, to run repeatedly:
 
 }

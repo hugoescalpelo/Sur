@@ -1,10 +1,6 @@
-void setModes ()
-{
-  pinMode (dir1, OUTPUT);
-  pinMode (step1, OUTPUT);
-  pinMode (dir2, OUTPUT);
-  pinMode (step2, OUTPUT);
-  pinMode (dir3, OUTPUT);
-  pinMode (step3, OUTPUT);
+void setPinModes (){
+  //Motor left
+  setPinMode (DIR_1, OUTPUT);
+  setPinMode (STEP_1, OUTPUT);
 }
 
