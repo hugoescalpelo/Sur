@@ -29,9 +29,11 @@
 //Constants
 const byte DIR_1 = 4;
 const byte STEP_1 = 5;
+const byte DIR_2 = 6;
+const byte STEP_2 = 7;
 const byte LEFT_MOTOR = 0;
 const byte RIGHT_MOTOR = 1;
-const byte COMPASS_MOTOR = 2
+const byte COMPASS_MOTOR = 2;
 const bool LEFT_DIR = 0;
 const bool RIGHT_DIR = 1;
 const int TIME_TESTEPS = 1000;
@@ -46,6 +48,7 @@ bool runMotor [] = {0,0,0};
 double stepTimeTarget [] = {0,0,0};
 double timeNow;
 bool levelMotor [] = {0,0,0};
+int testSteps;
 
 void setup() {
   // Serial Monitor communication
@@ -55,6 +58,7 @@ void setup() {
   setPinModes ();
   setInitialConditions ();
   testSequence ();
+  Serial.println ("Test Finished");
 
 }
 

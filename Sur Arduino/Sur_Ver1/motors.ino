@@ -4,15 +4,21 @@ void setMotor (byte nMotor, bool bDir, int tStep, bool activeMotor){
   stepMotorTime [nMotor] = tStep;
   runMotor [nMotor] = activeMotor;
   stepTimeTarget [nMotor] = tStep + micros ();
+  printMotorInitials (nMotor);
 }
 
 void runAllTest ()
 {
   timeNow = micros ();
   int i_run = LEFT_MOTOR;
-  if (timeNow > timeMotor [LEFT_MOTOR]){
+  if (timeNow > stepTimeTarget [LEFT_MOTOR] && runMotor [LEFT_MOTOR]){
     levelMotor [LEFT_MOTOR] = !levelMotor[LEFT_MOTOR];
-    stepMotorTime [LEFT_MOTOR] += stepMotorTime [LEFT_MOTOR];
+    stepTimeTarget [LEFT_MOTOR] += stepMotorTime [LEFT_MOTOR];
+    testSteps--;
+  }
+  if (timeNow > stepTimeTarget [RIGHT_MOTOR] && runMotor [RIGHT_MOTOR] == 1){
+    levelMotor [RIGHT_MOTOR] = !levelMotor[RIGHT_MOTOR];
+    stepTimeTarget [RIGHT_MOTOR] += stepMotorTime [RIGHT_MOTOR];
     testSteps--;
   }
 
@@ -20,6 +26,13 @@ void runAllTest ()
 }
 
 void driveAll (){
-  digitalWrite (STEP_1, levelMotor [LEFT_MOTOR]);
+  digitalWrite (STEP_1, levelMotor [LEFT_MOTOR]&runMotor [LEFT_MOTOR]);
+  digitalWrite (STEP_2, levelMotor [RIGHT_MOTOR]&runMotor [RIGHT_MOTOR]);
+}
+
+void stopAll (){
+  runMotor [LEFT_MOTOR] = OFF;
+  runMotor [RIGHT_MOTOR] = OFF;
+  runMotor [COMPASS_MOTOR] = OFF;
 }
 
