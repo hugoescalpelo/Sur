@@ -14,6 +14,7 @@
    V0.1 First development
    V0.2.1 Test sequence for L motor
    V0.2.2 Test for 3 motors single direction
+   V0.3 Merge Absolute orientation sensor code
 
    Team
    Iván Abreu Ochoa
@@ -24,8 +25,10 @@
 */
 
 //Libraries
-
-//Objects
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <utility/imumaths.h>
 
 //Constants
 const byte DIR_1 = 4;
@@ -44,6 +47,11 @@ const bool OFF = 0;
 const int TEST_STEPS = 1500;
 const int IBWTT = 250;//In Between Wait Test Time
 
+#define BNO055_SAMPLERATE_DELAY_MS (100)
+
+//Objects
+Adafruit_BNO055 bno = Adafruit_BNO055();
+
 //Variables
 bool dirMotor [] = {0, 0, 0};
 int stepMotorTime [] = {TIME_TESTEPS, TIME_TESTEPS, TIME_TESTEPS};
@@ -54,6 +62,8 @@ bool levelMotor [] = {0, 0, 0};
 int testSteps;
 byte compassSequence = 0;
 
+double AOSensorTime;
+
 void setup() {
   // Serial Monitor communication
   Serial.begin (2000000);
@@ -62,11 +72,21 @@ void setup() {
   setPinModes ();
   setInitialConditions ();
   testSequence ();
-  Serial.println ("Test Finished");
+  Serial.println ("Motor Test Finished");
+
+  beginOrientationSensor ();
+
+  //Initialize the sensor
+  if (!bno.begin ()){
+    Serial.println ("Check BNO055 sensor");
+    while (1);
+  }
+
+  delay (1000);
+  
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  readAbsoluteOrientationSensor ();
 }

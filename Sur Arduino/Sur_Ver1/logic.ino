@@ -57,7 +57,6 @@ void testSequence () {
   }
   stopAll ();
   delay (IBWTT);
-
-
 }
+
 
