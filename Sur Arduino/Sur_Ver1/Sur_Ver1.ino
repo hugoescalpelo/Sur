@@ -93,4 +93,5 @@ void loop() {
   readAbsoluteOrientationSensor ();
   shortestWayToSouth ();
   motorDirective ();
+  runAll ();
 }

@@ -84,3 +84,23 @@ void motorDirective () {
   setMotor (RIGHT_MOTOR, 0, workingMotorTimeStep, closeEnoughRight);
 }
 
+void runAll ()
+{
+  timeNow = micros ();
+  int i_run = LEFT_MOTOR;
+  if (timeNow > stepTimeTarget [LEFT_MOTOR] && runMotor [LEFT_MOTOR]) {
+    levelMotor [LEFT_MOTOR] = !levelMotor[LEFT_MOTOR];
+    stepTimeTarget [LEFT_MOTOR] += stepMotorTime [LEFT_MOTOR];
+  }
+  if (timeNow > stepTimeTarget [RIGHT_MOTOR] && runMotor [RIGHT_MOTOR]) {
+    levelMotor [RIGHT_MOTOR] = !levelMotor[RIGHT_MOTOR];
+    stepTimeTarget [RIGHT_MOTOR] += stepMotorTime [RIGHT_MOTOR];
+  }
+  if (timeNow > stepTimeTarget [COMPASS_MOTOR] && runMotor [COMPASS_MOTOR]) {
+    //levelMotor [COMPASS_MOTOR] = !levelMotor[COMPASS_MOTOR];
+    compassDrive ();
+    stepTimeTarget [COMPASS_MOTOR] += stepMotorTime [COMPASS_MOTOR];
+  }
+
+  driveAll ();
+}
