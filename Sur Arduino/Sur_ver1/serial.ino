@@ -9,5 +9,10 @@ void printMotorInitials (byte s_m) {
   Serial.print (runMotor [s_m]);
   Serial.print (" timeTarget ");
   Serial.println (stepTimeTarget [s_m]);
-
 }
+
+void printSensors () {
+  Serial.print ("S1 ");
+  Serial.println (lecture1);
+}
+

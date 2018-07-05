@@ -54,8 +54,9 @@ const int WORK_TIME_STEP = 900; //uSeconds
 const byte BASE_TH = 15; //Degrees
 const int PIN_S1 = A2;
 const int PIN_S2 = A3;
-const int DETECT_S1 = 500;
+const int DETECT_S1 = 700;
 const int DETECT_S2 = 530;
+const int HALL_DEBOUNCE = 100;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -80,6 +81,11 @@ int degreesLeft;
 int workingCompassTimeStep, workingMotorTimeStep;
 byte threshold = BASE_TH;
 bool closeEnoughCompass, closeEnoughLeft, closeEnoughRight;
+int  calibrationCounter;
+int lecture1;
+double stepRegistry [] = {0,0,0};
+double lastCalibrationCounter;
+double latestCalibrationCounter;
 
 void setup() {
   // Serial Monitor communication
@@ -91,8 +97,11 @@ void setup() {
   testSequence ();
   Serial.println ("Motor Test Finished");
 
+  Serial.println ("Calibrating compass Disk");
+  calibrateCompassDisc ();
+  Serial.println ("Calibration finished");
+  
   beginOrientationSensor ();
-
   setWorkingConditions ();
 }
 

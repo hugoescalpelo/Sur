@@ -1,0 +1,28 @@
+Change seeker
+
+Need a sequence that knows a change has been made
+The sensor goes in two values: 0 & 800
+
+Data cases are shown below
+
+Non detecting		Detecting		Trascient
+
+Case A	Case B		Case A	Case B		Case A	Case B
+0	800		0	800		0	800
+0	800		0	800		0	800
+0	800		0	800		0	800
+0	800		0	800		0	800
+0	800		0	800		800	0
+0	800		0	800		800	0
+0	800		800	0		800	0
+0	800		800	0		800	0
+0	800		800	0		0	800
+0	800		800	0		0	800
+0	800		800	0		0	800
+0	800		800	0		0	800
+
+So I need a sequence that identifies every chase, thus, the direction
+of the disc is expressed in the type of value that remains in non
+detecting case.
+
+I think a not-delayed 100 ms array filler woud do the thing

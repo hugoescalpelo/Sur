@@ -91,15 +91,18 @@ void runAll ()
   if (timeNow > stepTimeTarget [LEFT_MOTOR] && runMotor [LEFT_MOTOR]) {
     levelMotor [LEFT_MOTOR] = !levelMotor[LEFT_MOTOR];
     stepTimeTarget [LEFT_MOTOR] += stepMotorTime [LEFT_MOTOR];
+    stepRegistry [LEFT_MOTOR]++;
   }
   if (timeNow > stepTimeTarget [RIGHT_MOTOR] && runMotor [RIGHT_MOTOR]) {
     levelMotor [RIGHT_MOTOR] = !levelMotor[RIGHT_MOTOR];
     stepTimeTarget [RIGHT_MOTOR] += stepMotorTime [RIGHT_MOTOR];
+    stepRegistry [RIGHT_MOTOR]++;
   }
   if (timeNow > stepTimeTarget [COMPASS_MOTOR] && runMotor [COMPASS_MOTOR]) {
     //levelMotor [COMPASS_MOTOR] = !levelMotor[COMPASS_MOTOR];
     compassDrive ();
     stepTimeTarget [COMPASS_MOTOR] += stepMotorTime [COMPASS_MOTOR];
+    stepRegistry [COMPASS_MOTOR]++;
   }
 
   driveAll ();
