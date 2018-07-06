@@ -1,4 +1,4 @@
-void setMotor (byte nMotor, bool bDir, int tStep, bool activeMotor) {
+void setMotor (byte nMotor, bool bDir, long tStep, bool activeMotor) {
   //Set up inherited values for a motor
   dirMotor [nMotor] = bDir;
   stepMotorTime [nMotor] = tStep;
@@ -34,6 +34,8 @@ void runAllTest ()
 void driveAll () {
   digitalWrite (STEP_1, levelMotor [LEFT_MOTOR]&runMotor [LEFT_MOTOR]);
   digitalWrite (STEP_2, levelMotor [RIGHT_MOTOR]&runMotor [RIGHT_MOTOR]);
+  digitalWrite (DIR_1, dirMotor [LEFT_MOTOR]);
+  digitalWrite (DIR_2, dirMotor [LEFT_MOTOR]);
   compassStep ();
 }
 
@@ -54,13 +56,18 @@ void compassDrive () {
 }
 
 void compassStep () {
+  bool passArray [] = {0, 0, 0, 0};
+  passArray [compassSequence] = ON;
+  //  digitalWrite (COMPASS_PIN [0], LOW);
+  //  digitalWrite (COMPASS_PIN [1], LOW);
+  //  digitalWrite (COMPASS_PIN [2], LOW);
+  //  digitalWrite (COMPASS_PIN [3], LOW);
+  //  digitalWrite (COMPASS_PIN [compassSequence], HIGH & runMotor [COMPASS_MOTOR]);
 
-  digitalWrite (COMPASS_PIN [0], LOW);
-  digitalWrite (COMPASS_PIN [1], LOW);
-  digitalWrite (COMPASS_PIN [2], LOW);
-  digitalWrite (COMPASS_PIN [3], LOW);
-
-  digitalWrite (COMPASS_PIN [compassSequence], HIGH&runMotor [COMPASS_MOTOR]);
+  digitalWrite (COMPASS_PIN [0], passArray [0]);
+  digitalWrite (COMPASS_PIN [1], passArray [1]);
+  digitalWrite (COMPASS_PIN [2], passArray [2]);
+  digitalWrite (COMPASS_PIN [3], passArray [3]);
 }
 
 void motorDirective () {
@@ -71,17 +78,22 @@ void motorDirective () {
   }
   else if (degreesLeft > threshold && diffference > 0) {
     closeEnoughLeft = ON;
-    closeEnoughRight = OFF;
-    closeEnoughCompass = ON;
-  }
-  else if (degreesLeft > threshold && diffference < 0) {
-    closeEnoughLeft = OFF;
     closeEnoughRight = ON;
     closeEnoughCompass = ON;
+    workingDirLeft = LEFT_DIR;
+    workingDirRight = RIGHT_DIR;
   }
+  else if (degreesLeft > threshold && diffference < 0) {
+    closeEnoughLeft = ON;
+    closeEnoughRight = ON;
+    closeEnoughCompass = ON;
+    workingDirLeft = RIGHT_DIR;
+    workingDirRight = LEFT_DIR;
+  }
+
+  setMotor (LEFT_MOTOR, workingDirLeft, workingMotorTimeStep, closeEnoughLeft);
+  setMotor (RIGHT_MOTOR, workingDirRight, workingMotorTimeStep, closeEnoughRight);
   setMotor (COMPASS_MOTOR, compassDirection, workingCompassTimeStep, closeEnoughCompass);
-  setMotor (LEFT_MOTOR, 0, workingMotorTimeStep, closeEnoughLeft);
-  setMotor (RIGHT_MOTOR, 0, workingMotorTimeStep, closeEnoughRight);
 }
 
 void runAll ()

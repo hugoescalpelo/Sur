@@ -26,3 +26,18 @@ of the disc is expressed in the type of value that remains in non
 detecting case.
 
 I think a not-delayed 100 ms array filler woud do the thing
+
+A single number code woud fit the needs
+
+0: Non detecting Case A, left direction
+1: Non detecting Case B, right direction
+2: Detecting Case A, left direction
+3: Detecting Case B, right direction
+4: Trascient Case A, left direction
+5: Trascient Case B, right direction
+
+Also, user must provide calibration data:
+
+DETECT_THRESHOLD = 800; //The nuber who diferentiate detect from non detect
+SENSOR_WINDOW_TIME = 100000; //A number in microseconds that sets the time between readings (100 ms)
+TRASCIENT_TIME = 800000; //A number in microseconds that sets the time that defines a trascient (800ms)

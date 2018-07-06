@@ -18,7 +18,10 @@
    V0.4 ShortestWay Added
    V0.5 Continuous Movement Added
    V0.6 Sensor compass calibration added
-   
+   V0.6.1 Compass Servo sequence fixed
+   V0.6.2 Change direction sequence Added
+   V0.6.3 Pull and push mirror movement in reducer steppers added
+
    Team
    Iván Abreu Ochoa
    Malitzin Cortes
@@ -44,19 +47,23 @@ const byte RIGHT_MOTOR = 1;
 const byte COMPASS_MOTOR = 2;
 const bool LEFT_DIR = 0;
 const bool RIGHT_DIR = 1;
-const int TIME_TESTEPS = 1000;
+const long TIME_TESTEPS = 1000;
 const bool ON = 1;
 const bool OFF = 0;
 const int TEST_STEPS = 1500;
 const int IBWTT = 250;//In Between Wait Test Time
-const int WORK_TIME_STEP_COMPASS = 3000; //uSeconds
-const int WORK_TIME_STEP = 900; //uSeconds
+const long WORK_TIME_STEP_COMPASS = 3000; //uSeconds
+const long WORK_TIME_STEP = 900; //uSeconds
 const byte BASE_TH = 15; //Degrees
 const int PIN_S1 = A2;
 const int PIN_S2 = A3;
 const int DETECT_S1 = 700;
 const int DETECT_S2 = 530;
 const int HALL_DEBOUNCE = 100;
+const int RING_LENGTH = 16;
+const long SENSOR_SAMPLE_TIME = 80000;
+const long TRASCIENT_TIME_UP = 1500000;
+const long TRASCIENT_TIME_DOWN = 600000;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -65,27 +72,36 @@ Adafruit_BNO055 bno = Adafruit_BNO055();
 
 //Variables
 bool dirMotor [] = {0, 0, 0};
-int stepMotorTime [] = {TIME_TESTEPS, TIME_TESTEPS, TIME_TESTEPS};
+long stepMotorTime [] = {TIME_TESTEPS, TIME_TESTEPS, TIME_TESTEPS};
 bool runMotor [] = {0, 0, 0};
-double stepTimeTarget [] = {0, 0, 0};
-double timeNow;
+long stepTimeTarget [] = {0, 0, 0};
+long timeNow;
 bool levelMotor [] = {0, 0, 0};
 int testSteps;
 byte compassSequence = 0;
 
-double AOSensorTime;
+long AOSensorTime;
 int heading;
 int diffference;
 bool compassDirection;
 int degreesLeft;
-int workingCompassTimeStep, workingMotorTimeStep;
+long workingCompassTimeStep, workingMotorTimeStep;
+long workingDirLeft, workingDirRight;
 byte threshold = BASE_TH;
 bool closeEnoughCompass, closeEnoughLeft, closeEnoughRight;
 int  calibrationCounter;
 int lecture1;
-double stepRegistry [] = {0,0,0};
-double lastCalibrationCounter;
-double latestCalibrationCounter;
+long stepRegistry [] = {0, 0, 0};
+long lastCalibrationCounter;
+long latestCalibrationCounter;
+byte i_sensorRing = 0;
+byte sensorRing [RING_LENGTH];
+long sensorTime;
+byte markOne;
+byte pointOne, pointTwo;
+long isTrascient;
+int lastResponse;
+
 
 void setup() {
   // Serial Monitor communication
@@ -100,7 +116,7 @@ void setup() {
   Serial.println ("Calibrating compass Disk");
   calibrateCompassDisc ();
   Serial.println ("Calibration finished");
-  
+
   beginOrientationSensor ();
   setWorkingConditions ();
 }

@@ -7,6 +7,7 @@ void setInitialConditions () {
   digitalWrite (COMPASS_PIN [1], LOW);
   digitalWrite (COMPASS_PIN [2], LOW);
   digitalWrite (COMPASS_PIN [3], LOW);
+  sensorTime = millis () + SENSOR_SAMPLE_TIME;
 }
 
 void testSequence () {
@@ -26,7 +27,7 @@ void testSequence () {
   stopAll ();
   delay (IBWTT);
 
-  setMotor (COMPASS_MOTOR, LEFT_DIR, TIME_TESTEPS*4, ON);
+  setMotor (COMPASS_MOTOR, LEFT_DIR, TIME_TESTEPS * 2, ON);
   testSteps = TEST_STEPS;
   while (testSteps > 0) {
     runAllTest ();
@@ -50,7 +51,7 @@ void testSequence () {
   stopAll ();
   delay (IBWTT);
 
-  setMotor (COMPASS_MOTOR, RIGHT_DIR, TIME_TESTEPS*4, ON);
+  setMotor (COMPASS_MOTOR, RIGHT_DIR, TIME_TESTEPS * 2, ON);
   testSteps = TEST_STEPS;
   while (testSteps > 0) {
     runAllTest ();
@@ -77,13 +78,12 @@ void setWorkingConditions () {
 
 void calibrateCompassDisc () {
   stopAll ();
-  setMotor (COMPASS_MOTOR, RIGHT_DIR, TIME_TESTEPS*4, ON);
+  setMotor (COMPASS_MOTOR, RIGHT_DIR, TIME_TESTEPS * 3, ON);
   bool c_f = 0;
   Serial.println ("Looking for magnet");
   while (c_f != 1) {
-    readAll ();
     runAll ();
-    if (lecture1 > DETECT_S1) {
+    if (readAll () == 2) {
       c_f = 1;
     }
   }
@@ -92,25 +92,23 @@ void calibrateCompassDisc () {
   while (calibrationCounter < HALL_DEBOUNCE) {
     lecture1 = analogRead (PIN_S1);
     runAll ();
-    calibrationCounter++;//Check step counter, to add only at steps (remember the asynchronous mode)
   }
   while (c_f != 0) {
-    readAll ();
     runAll ();
     calibrationCounter++;
-    if (lecture1 > DETECT_S1) {
+    if (readAll () == 2) {
       c_f = 1;
     }
   }
   latestCalibrationCounter = stepRegistry [COMPASS_MOTOR];
   calibrationCounter = latestCalibrationCounter - lastCalibrationCounter;
   lastCalibrationCounter = stepRegistry [COMPASS_MOTOR];
-  setMotor (COMPASS_MOTOR, LEFT_DIR, TIME_TESTEPS*4, ON);
+  setMotor (COMPASS_MOTOR, LEFT_DIR, TIME_TESTEPS * 4, ON);
   int i_compass = 0;
   while (latestCalibrationCounter - lastCalibrationCounter < calibrationCounter) {
     runAll ();
     latestCalibrationCounter = stepRegistry [COMPASS_MOTOR];
-    
+
   }
 }
 

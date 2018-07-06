@@ -16,3 +16,8 @@ void printSensors () {
   Serial.println (lecture1);
 }
 
+void printCompassPins ()
+{
+  
+}
+
