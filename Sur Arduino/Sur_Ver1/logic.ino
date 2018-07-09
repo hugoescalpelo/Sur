@@ -112,3 +112,19 @@ void calibrateCompassDisc () {
   }
 }
 
+void searchSouth () {
+  bool stopSearch = 0;
+  while (stopSearch == 0) {
+    readBT ();
+    if (rValueBT.toInt () == 59) {
+      stopSearch = 1;
+    }
+    else {
+      readAbsoluteOrientationSensor ();
+      shortestWayToSouth ();
+      motorDirective ();
+      runAll ();
+    }
+  }
+}
+

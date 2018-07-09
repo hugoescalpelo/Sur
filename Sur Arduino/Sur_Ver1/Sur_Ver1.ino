@@ -21,6 +21,8 @@
    V0.6.1 Compass Servo sequence fixed
    V0.6.2 Change direction sequence Added
    V0.6.3 Pull and push mirror movement in reducer steppers added
+   V0.6.4 Bluetooth communication
+   V0.7 Bluetooth Control
 
    Team
    Iván Abreu Ochoa
@@ -101,6 +103,10 @@ byte markOne;
 byte pointOne, pointTwo;
 long isTrascient;
 int lastResponse;
+bool handShake = 0;
+String rValueBT;
+int buffGeneral;
+int buffMag;
 
 
 void setup() {
@@ -110,20 +116,74 @@ void setup() {
 
   setPinModes ();
   setInitialConditions ();
-  testSequence ();
-  Serial.println ("Motor Test Finished");
 
-  Serial.println ("Calibrating compass Disk");
-  calibrateCompassDisc ();
-  Serial.println ("Calibration finished");
+  //Wait for a recongizable number, only initialize when the
+  //expected number is received
+  waitHandShake ();
 
-  beginOrientationSensor ();
   setWorkingConditions ();
+
+  printMenu ();
 }
 
 void loop() {
-  readAbsoluteOrientationSensor ();
-  shortestWayToSouth ();
-  motorDirective ();
-  runAll ();
+
+  /*re position this in an specific submenu}
+    readAbsoluteOrientationSensor ();
+    shortestWayToSouth ();
+    motorDirective ();
+    runAll ();
+
+  */
+
+  //Bluetooth configuration service. A menu accesable theough serial BT
+  //that determines on-off functions mainly. Also let you choose a
+  //manual calibration, test sequence and independently confivurations
+  //of working parameters...
+
+  readBT ();
+  buffGeneral = rValueBT.toInt ();
+  switch (buffGeneral) {
+    case 0:
+      printMenu ();
+      clean ();
+      break;
+    case 1:
+      testSequence ();
+      clean ();
+      Serial2.println ("Test Sequence Done");
+      break;
+    case 2:
+      beginOrientationSensor ();
+      clean ();
+      Serial2.println ("Absolute Orientation Sensor started");
+      break;
+    case 3:
+      runUntilCalibrate ();
+      clean ();
+      Serial2.println ("Sensor Calibrated");
+      break;
+    case 4:
+      calibrateCompassDisc ();
+      clean ();
+      Serial.println ("Calibration finished");
+      break;
+    case 5:
+      searchSouth ();
+      clean ();
+      Serial.println (";)");
+      break;
+    case 6:
+      tense ();
+      clean ();
+      break;
+    case 7:
+      loose ();
+      clean ();
+      break;
+    default:
+      Serial2.println ("Try Again");
+      printMenu ();
+      break;
+  }
 }

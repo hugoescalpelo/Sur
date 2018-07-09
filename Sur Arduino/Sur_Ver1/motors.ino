@@ -10,7 +10,6 @@ void setMotor (byte nMotor, bool bDir, long tStep, bool activeMotor) {
 void runAllTest ()
 {
   timeNow = micros ();
-  int i_run = LEFT_MOTOR;
   if (timeNow > stepTimeTarget [LEFT_MOTOR] && runMotor [LEFT_MOTOR]) {
     levelMotor [LEFT_MOTOR] = !levelMotor[LEFT_MOTOR];
     stepTimeTarget [LEFT_MOTOR] += stepMotorTime [LEFT_MOTOR];
@@ -99,7 +98,6 @@ void motorDirective () {
 void runAll ()
 {
   timeNow = micros ();
-  int i_run = LEFT_MOTOR;
   if (timeNow > stepTimeTarget [LEFT_MOTOR] && runMotor [LEFT_MOTOR]) {
     levelMotor [LEFT_MOTOR] = !levelMotor[LEFT_MOTOR];
     stepTimeTarget [LEFT_MOTOR] += stepMotorTime [LEFT_MOTOR];
@@ -119,3 +117,26 @@ void runAll ()
 
   driveAll ();
 }
+
+void tense () {
+  stopAll ();
+  setMotor (LEFT_MOTOR,LEFT_DIR, TIME_TESTEPS, ON);
+  setMotor (RIGHT_MOTOR, RIGHT_DIR, TIME_TESTEPS, ON);
+  testSteps = TEST_STEPS;
+  while (testSteps > 0) {
+    runAllTest ();
+  }
+  stopAll ();
+}
+
+void loose () {
+  stopAll ();
+  setMotor (LEFT_MOTOR,RIGHT_DIR, TIME_TESTEPS, ON);
+  setMotor (RIGHT_MOTOR, LEFT_DIR, TIME_TESTEPS, ON);
+  testSteps = TEST_STEPS;
+  while (testSteps > 0) {
+    runAllTest ();
+  }
+  stopAll ();
+}
+

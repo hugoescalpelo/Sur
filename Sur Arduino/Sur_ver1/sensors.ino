@@ -16,7 +16,7 @@ void addSensorReading (int val) {
 }
 
 void checkEventRing () {
-  int ringLengthHelper = RING_LENGTH -1;
+  int ringLengthHelper = RING_LENGTH - 1;
   int lectureA = 0;
   int lectureB = 0;
   byte response;
@@ -31,7 +31,7 @@ void checkEventRing () {
       else {
         pointTwo = i_ch;
       }
-    }    
+    }
   }
   if (markOne == 0) {
     response = 0;
@@ -39,7 +39,7 @@ void checkEventRing () {
   if (markOne == 1) {
     response = 1;
   }
-  else if (markOne ==2)
+  else if (markOne == 2)
   {
     isTrascient = (pointTwo - pointOne) * SENSOR_SAMPLE_TIME;
     if (isTrascient < TRASCIENT_TIME_UP && isTrascient > TRASCIENT_TIME_DOWN) {
