@@ -1,11 +1,12 @@
 byte readAll () {
   timeNow = micros ();
   if (timeNow - sensorTime > SENSOR_SAMPLE_TIME) {
-    addSensorReading (analogRead (PIN_S1));
+    lecture1 = analogRead (PIN_S1);
+    addSensorReading (lecture1);
     checkEventRing ();
     sensorTime += SENSOR_SAMPLE_TIME;
-  }
-  printSensors ();
+    printSensors ();
+  }  
 }
 
 void addSensorReading (int val) {

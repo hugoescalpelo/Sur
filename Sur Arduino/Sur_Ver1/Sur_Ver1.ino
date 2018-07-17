@@ -1,7 +1,7 @@
 /*
    Ivan Abreu Studio.
 
-   03/07/2018
+   17/07/2018
 
    This code controls a set of 3 stepper motors, 2 of them are
    used to turn the head of the system host, the last one to
@@ -23,6 +23,7 @@
    V0.6.3 Pull and push mirror movement in reducer steppers added
    V0.6.4 Bluetooth communication
    V0.7 Bluetooth Control
+   V0.7.1 Bluetooth addons & Sensore lecture tested
 
    Team
    Iván Abreu Ochoa
@@ -49,10 +50,10 @@ const byte RIGHT_MOTOR = 1;
 const byte COMPASS_MOTOR = 2;
 const bool LEFT_DIR = 0;
 const bool RIGHT_DIR = 1;
-const long TIME_TESTEPS = 1000;
+const long TIME_TESTEPS = 1500;
 const bool ON = 1;
 const bool OFF = 0;
-const int TEST_STEPS = 1500;
+const long TEST_STEPS = 1500;
 const int IBWTT = 250;//In Between Wait Test Time
 const long WORK_TIME_STEP_COMPASS = 3000; //uSeconds
 const long WORK_TIME_STEP = 900; //uSeconds
@@ -63,9 +64,10 @@ const int DETECT_S1 = 700;
 const int DETECT_S2 = 530;
 const int HALL_DEBOUNCE = 100;
 const int RING_LENGTH = 16;
-const long SENSOR_SAMPLE_TIME = 80000;
+const long SENSOR_SAMPLE_TIME = 200000;
 const long TRASCIENT_TIME_UP = 1500000;
 const long TRASCIENT_TIME_DOWN = 600000;
+const long LOOKING_MAGNET_STEP_TIME = 50000;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -79,7 +81,7 @@ bool runMotor [] = {0, 0, 0};
 long stepTimeTarget [] = {0, 0, 0};
 long timeNow;
 bool levelMotor [] = {0, 0, 0};
-int testSteps;
+long testSteps;
 byte compassSequence = 0;
 
 long AOSensorTime;
@@ -105,7 +107,7 @@ long isTrascient;
 int lastResponse;
 bool handShake = 0;
 String rValueBT;
-int buffGeneral;
+int buffBT;
 int buffMag;
 
 
@@ -114,16 +116,30 @@ void setup() {
   Serial.begin (2000000);
   Serial.println ("Setting up");
 
+  Serial2.begin (9600);
+  Serial2.println ("BT Started");
+
   setPinModes ();
   setInitialConditions ();
 
+  //Serial.println ("Test Started");
+  //testSequence ();
+  //Serial.println ("Test Finished");
+
   //Wait for a recongizable number, only initialize when the
   //expected number is received
+
+  Serial.println ("Waiting Handshake");
+  delay (100);
+  Serial2.println ("Enter Handshake");
+  delay (100);
   waitHandShake ();
+  Serial.println ("Hanshake Received");
 
   setWorkingConditions ();
 
   printMenu ();
+  clean ();
 }
 
 void loop() {
@@ -142,31 +158,43 @@ void loop() {
   //of working parameters...
 
   readBT ();
-  buffGeneral = rValueBT.toInt ();
-  switch (buffGeneral) {
+  buffBT = rValueBT.toInt ();
+  switch (buffBT) {
     case 0:
       printMenu ();
       clean ();
       break;
     case 1:
+      Serial.println ("Test sequence in progreess");
+      Serial2.println ("Test sequence in progress");
       testSequence ();
       clean ();
+      Serial.println ("Test sequence done");
       Serial2.println ("Test Sequence Done");
       break;
     case 2:
+      Serial.println ("Begin Orientation Sensor");
+      Serial2.println ("Begin Orientation Sensor");
       beginOrientationSensor ();
       clean ();
+      Serial.println ("Absolute Orientation Sensor started");
       Serial2.println ("Absolute Orientation Sensor started");
       break;
     case 3:
+      Serial.println ("Calibrating Absolute Orientation Sensor");
+      Serial2.println ("Calibrating Absolute Orientation Sensor");
       runUntilCalibrate ();
       clean ();
-      Serial2.println ("Sensor Calibrated");
+      Serial.println ("Compass Absolute Orientation Sensor");
+      Serial2.println ("Compass Absolute Orientation Sensor");
       break;
     case 4:
+    Serial.println ("Calibrating compass");
+    Serial2.println ("Calibrating compass");
       calibrateCompassDisc ();
       clean ();
-      Serial.println ("Calibration finished");
+      Serial.println ("Compass calibrated");
+      Serial2.println ("Compass calibrated");
       break;
     case 5:
       searchSouth ();
@@ -181,9 +209,9 @@ void loop() {
       loose ();
       clean ();
       break;
-    default:
-      Serial2.println ("Try Again");
-      printMenu ();
-      break;
+      //    default:
+      //      Serial2.println ("Try Again");
+      //      printMenu ();
+      //      break;
   }
 }

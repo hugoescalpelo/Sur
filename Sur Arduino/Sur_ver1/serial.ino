@@ -21,19 +21,32 @@ void printCompassPins ()
 
 }
 
-void printReceivedValues () {
+void printReceivedBTValues () {
   Serial.println ();
   Serial.print ("R ");
   Serial.println (rValueBT);
   Serial.println ();
 
-  Serial2.println ();
-  Serial.print ("R ");
-  Serial.println (rValueBT);
-  Serial.println ();
+  delay (100);
+  Serial2.print ("R: ");
+  Serial2.print (rValueBT);
+  delay (100);
 }
 
 void printMenu () {
+  Serial.println ("Menu");
+  Serial.println ("0 Menu");
+  Serial.println ("1 test motors");
+  Serial.println ("2 begin sensor");
+  Serial.println ("3 check if sensor calibrated");
+  Serial.println ("4 calibrate compass disk");
+  Serial.println ("5 run");
+  Serial.println ("6 tense");
+  Serial.println ("7 loose");
+  delay (100);
+}
+
+void printMenuBT () {
   Serial2.println ("Menu");
   Serial2.println ("0 Menu");
   Serial2.println ("1 test motors");

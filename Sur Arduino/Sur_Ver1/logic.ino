@@ -78,7 +78,7 @@ void setWorkingConditions () {
 
 void calibrateCompassDisc () {
   stopAll ();
-  setMotor (COMPASS_MOTOR, RIGHT_DIR, TIME_TESTEPS * 3, ON);
+  setMotor (COMPASS_MOTOR, LEFT_DIR, LOOKING_MAGNET_STEP_TIME, ON);
   bool c_f = 0;
   Serial.println ("Looking for magnet");
   while (c_f != 1) {

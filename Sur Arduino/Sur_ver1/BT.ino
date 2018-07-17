@@ -10,9 +10,10 @@ void waitHandShake () {
   //Wait for a recognizable value to keep going
   while (handShake == 0) {
     readBT ();
-    buffGeneral = rValueBT.toInt ();
-    if (buffGeneral == 1501) {
-      testSequence ();
+    buffBT = rValueBT.toInt ();
+    if (buffBT == 1501) {
+      Serial2.println ("Welcome");
+      delay (1000);
       handShake = 1;
     }
   }
@@ -20,6 +21,6 @@ void waitHandShake () {
 
 void clean () {
   rValueBT = 'null';//A null value to prevent missreadings
-  buffGeneral = 200; //An off the limits value to prevent missfunction
+  buffBT= 200; //An off the limits value to prevent missfunction
 }
 
