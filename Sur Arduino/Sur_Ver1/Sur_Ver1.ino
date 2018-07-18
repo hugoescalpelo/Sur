@@ -48,8 +48,8 @@ const byte COMPASS_PIN [] = {8, 9, 10, 11};
 const byte LEFT_MOTOR = 0;
 const byte RIGHT_MOTOR = 1;
 const byte COMPASS_MOTOR = 2;
-const bool LEFT_DIR = 0;
-const bool RIGHT_DIR = 1;
+const bool COUNTER_CLOCKWISE = 1;
+const bool CLOCKWISE = 0;
 const long TIME_TESTEPS = 1500;
 const bool ON = 1;
 const bool OFF = 0;
@@ -60,14 +60,9 @@ const long WORK_TIME_STEP = 900; //uSeconds
 const byte BASE_TH = 15; //Degrees
 const int PIN_S1 = A2;
 const int PIN_S2 = A3;
-const int DETECT_S1 = 700;
-const int DETECT_S2 = 530;
 const int HALL_DEBOUNCE = 100;
-const int RING_LENGTH = 16;
 const long SENSOR_SAMPLE_TIME = 200000;
-const long TRASCIENT_TIME_UP = 1500000;
-const long TRASCIENT_TIME_DOWN = 600000;
-const long LOOKING_MAGNET_STEP_TIME = 50000;
+const long LOOKING_MAGNET_STEP_TIME = 11000;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -94,17 +89,11 @@ long workingDirLeft, workingDirRight;
 byte threshold = BASE_TH;
 bool closeEnoughCompass, closeEnoughLeft, closeEnoughRight;
 int  calibrationCounter;
-int lecture1;
+int lecture1, lecture2;
 long stepRegistry [] = {0, 0, 0};
 long lastCalibrationCounter;
-long latestCalibrationCounter;
 byte i_sensorRing = 0;
-byte sensorRing [RING_LENGTH];
 long sensorTime;
-byte markOne;
-byte pointOne, pointTwo;
-long isTrascient;
-int lastResponse;
 bool handShake = 0;
 String rValueBT;
 int buffBT;

@@ -45,11 +45,11 @@ void stopAll () {
 }
 
 void compassDrive () {
-  if (dirMotor [COMPASS_MOTOR] == LEFT_DIR) {
-    compassSequence++;
+  if (dirMotor [COMPASS_MOTOR] == COUNTER_CLOCKWISE) {
+    compassSequence--;
   }
   else {
-    compassSequence--;
+    compassSequence++;
   }
   compassSequence = compassSequence % 4;
 }
@@ -57,11 +57,6 @@ void compassDrive () {
 void compassStep () {
   bool passArray [] = {0, 0, 0, 0};
   passArray [compassSequence] = ON;
-  //  digitalWrite (COMPASS_PIN [0], LOW);
-  //  digitalWrite (COMPASS_PIN [1], LOW);
-  //  digitalWrite (COMPASS_PIN [2], LOW);
-  //  digitalWrite (COMPASS_PIN [3], LOW);
-  //  digitalWrite (COMPASS_PIN [compassSequence], HIGH & runMotor [COMPASS_MOTOR]);
 
   digitalWrite (COMPASS_PIN [0], passArray [0]);
   digitalWrite (COMPASS_PIN [1], passArray [1]);
@@ -79,15 +74,15 @@ void motorDirective () {
     closeEnoughLeft = ON;
     closeEnoughRight = ON;
     closeEnoughCompass = ON;
-    workingDirLeft = LEFT_DIR;
-    workingDirRight = RIGHT_DIR;
+    workingDirLeft = COUNTER_CLOCKWISE;
+    workingDirRight = CLOCKWISE;
   }
   else if (degreesLeft > threshold && diffference < 0) {
     closeEnoughLeft = ON;
     closeEnoughRight = ON;
     closeEnoughCompass = ON;
-    workingDirLeft = RIGHT_DIR;
-    workingDirRight = LEFT_DIR;
+    workingDirLeft = CLOCKWISE;
+    workingDirRight = COUNTER_CLOCKWISE;
   }
 
   setMotor (LEFT_MOTOR, workingDirLeft, workingMotorTimeStep, closeEnoughLeft);
@@ -101,18 +96,33 @@ void runAll ()
   if (timeNow > stepTimeTarget [LEFT_MOTOR] && runMotor [LEFT_MOTOR]) {
     levelMotor [LEFT_MOTOR] = !levelMotor[LEFT_MOTOR];
     stepTimeTarget [LEFT_MOTOR] += stepMotorTime [LEFT_MOTOR];
-    stepRegistry [LEFT_MOTOR]++;
+    if (dirMotor [LEFT_MOTOR] == CLOCKWISE) {
+      stepRegistry [LEFT_MOTOR]++;
+    }
+    else {
+      stepRegistry [LEFT_MOTOR]--;
+    }
   }
   if (timeNow > stepTimeTarget [RIGHT_MOTOR] && runMotor [RIGHT_MOTOR]) {
     levelMotor [RIGHT_MOTOR] = !levelMotor[RIGHT_MOTOR];
     stepTimeTarget [RIGHT_MOTOR] += stepMotorTime [RIGHT_MOTOR];
-    stepRegistry [RIGHT_MOTOR]++;
+    if (dirMotor [RIGHT_MOTOR] == CLOCKWISE) {
+      stepRegistry [RIGHT_MOTOR]++;
+    }
+    else {
+      stepRegistry [RIGHT_MOTOR]--;
+    }
   }
   if (timeNow > stepTimeTarget [COMPASS_MOTOR] && runMotor [COMPASS_MOTOR]) {
     //levelMotor [COMPASS_MOTOR] = !levelMotor[COMPASS_MOTOR];
     compassDrive ();
     stepTimeTarget [COMPASS_MOTOR] += stepMotorTime [COMPASS_MOTOR];
-    stepRegistry [COMPASS_MOTOR]++;
+    if (dirMotor [COMPASS_MOTOR] == CLOCKWISE) {
+      stepRegistry [COMPASS_MOTOR]++;
+    }
+    else {
+      stepRegistry [COMPASS_MOTOR]--;
+    }
   }
 
   driveAll ();
@@ -120,8 +130,8 @@ void runAll ()
 
 void tense () {
   stopAll ();
-  setMotor (LEFT_MOTOR,LEFT_DIR, TIME_TESTEPS, ON);
-  setMotor (RIGHT_MOTOR, RIGHT_DIR, TIME_TESTEPS, ON);
+  setMotor (LEFT_MOTOR,COUNTER_CLOCKWISE, TIME_TESTEPS, ON);
+  setMotor (RIGHT_MOTOR, CLOCKWISE, TIME_TESTEPS, ON);
   testSteps = TEST_STEPS;
   while (testSteps > 0) {
     runAllTest ();
@@ -131,8 +141,8 @@ void tense () {
 
 void loose () {
   stopAll ();
-  setMotor (LEFT_MOTOR,RIGHT_DIR, TIME_TESTEPS, ON);
-  setMotor (RIGHT_MOTOR, LEFT_DIR, TIME_TESTEPS, ON);
+  setMotor (LEFT_MOTOR,CLOCKWISE, TIME_TESTEPS, ON);
+  setMotor (RIGHT_MOTOR, COUNTER_CLOCKWISE, TIME_TESTEPS, ON);
   testSteps = TEST_STEPS;
   while (testSteps > 0) {
     runAllTest ();

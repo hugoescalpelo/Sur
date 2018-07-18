@@ -13,7 +13,9 @@ void printMotorInitials (byte s_m) {
 
 void printSensors () {
   Serial.print ("S1 ");
-  Serial.println (lecture1);
+  Serial.print (lecture1);
+  Serial.print (" S2 ");
+  Serial.println (lecture2);
 }
 
 void printCompassPins ()
