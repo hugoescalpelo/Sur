@@ -24,6 +24,7 @@
    V0.6.4 Bluetooth communication
    V0.7 Bluetooth Control
    V0.7.1 Bluetooth addons & Sensore lecture tested
+   V0.7.2 Sensor sequence tested
 
    Team
    Iván Abreu Ochoa
@@ -63,6 +64,7 @@ const int PIN_S2 = A3;
 const int HALL_DEBOUNCE = 100;
 const long SENSOR_SAMPLE_TIME = 200000;
 const long LOOKING_MAGNET_STEP_TIME = 11000;
+const int SOUTH_DEGREES = 180;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -98,6 +100,7 @@ bool handShake = 0;
 String rValueBT;
 int buffBT;
 int buffMag;
+int stepsPerDegree;
 
 
 void setup() {

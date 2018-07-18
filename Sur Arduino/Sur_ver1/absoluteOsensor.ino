@@ -31,7 +31,7 @@ void readAbsoluteOrientationSensor () {
     uint8_t system, gyro, accel, mag = 0;
     bno.getCalibration (&system, &gyro, &accel, &mag);
     Serial.print ("Mag= ");
-    Serial.print (mag, DEC);
+    Serial.println (mag, DEC);
     buffMag = mag;
     AOSensorTime += BNO055_SAMPLERATE_DELAY_MS;
   }

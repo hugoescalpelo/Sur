@@ -150,7 +150,23 @@ void calibrateCompassDisc () {
   Serial.println (stepRegistry [COMPASS_MOTOR]);
 
   calibrationCounter = abs (calibrationCounter);
+  stepsPerDegree = calibrationCounter / 360;
   
+  int needlePosition = 210;
+  int initialDeviation = SOUTH_DEGREES - needlePosition;
+
+   if (initialDeviation < 0) {
+    setMotor (COMPASS_MOTOR, COUNTER_CLOCKWISE, LOOKING_MAGNET_STEP_TIME, ON);
+    lastCalibrationCounter = stepRegistry [COMPASS_MOTOR] + (initialDeviation * stepsPerDegree);
+   }
+   else {
+    setMotor (COMPASS_MOTOR, CLOCKWISE, LOOKING_MAGNET_STEP_TIME, ON);
+   }
+
+  while (stepRegistry [COMPASS_MOTOR] != lastCalibrationCounter) {
+    
+    runAll ();
+  }
 
 
 }
