@@ -1,7 +1,7 @@
 /*
    Ivan Abreu Studio.
 
-   17/07/2018
+   19/07/2018
 
    This code controls a set of 3 stepper motors, 2 of them are
    used to turn the head of the system host, the last one to
@@ -27,7 +27,10 @@
    V0.7.2 Sensor sequence tested
    V0.7.3 Steps per degrees value added
    V0.7.4 Compass calibration tested
-   V0.8 Compass & reducers behaviour tested
+   V0.8 Compass & reducers behaviour tested. MPA reached
+   V0.8.1 Gradient speed added
+   V0.8.2 Loose-Tense sequence tested
+   
 
    Team
    Iván Abreu Ochoa
@@ -69,6 +72,8 @@ const long SENSOR_SAMPLE_TIME = 200000;
 const long LOOKING_MAGNET_STEP_TIME = 11000;
 const int SOUTH_DEGREES = 180;
 const long RUN_SAMPLE = 50000;
+const long TENSE_LOOSE = 200;
+const long LOOSE_TENSE_TIME_STEP = 8000;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -191,15 +196,22 @@ void loop() {
       Serial2.println ("Compass calibrated");
       break;
     case 5:
+    Serial.println ("Running");
+    Serial2.println ("Running");
       searchSouth ();
       clean ();
       Serial.println (";)");
+      Serial2.println (";)");
       break;
     case 6:
+    Serial.println ("Tense");
+    Serial.println ("Tense");
       tense ();
       clean ();
       break;
     case 7:
+    Serial.println ("Loose");
+    Serial2.println ("Loose");
       loose ();
       clean ();
       break;

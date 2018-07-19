@@ -178,7 +178,8 @@ void searchSouth () {
         shortestWayToSouth ();
         motorDirective ();
         compassFetch ();
-        printNeedle ();
+        speedGradient ();
+        //printNeedle ();
         runSample =  runSample + RUN_SAMPLE;
       }
       runAll ();
@@ -208,5 +209,10 @@ degreesLeft = abs (diffference);
 void compassFetch () {
   needlePosition = abs ((180 + ((homeNeedle - stepRegistry [COMPASS_MOTOR]) / stepsPerDegree)) % 360);
   compassDegreesLeft = abs (needlePosition - heading);
+}
+
+void speedGradient () {
+  workingMotorTimeStep = map (degreesLeft, -1, 361, 12000, 6000);
+  workingCompassTimeStep = map (abs (diferenccce), -1, 361, 12000, 3000);  
 }
 

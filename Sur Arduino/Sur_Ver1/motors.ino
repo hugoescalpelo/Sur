@@ -34,7 +34,7 @@ void driveAll () {
   digitalWrite (STEP_1, levelMotor [LEFT_MOTOR]&runMotor [LEFT_MOTOR]);
   digitalWrite (STEP_2, levelMotor [RIGHT_MOTOR]&runMotor [RIGHT_MOTOR]);
   digitalWrite (DIR_1, dirMotor [LEFT_MOTOR]);
-  digitalWrite (DIR_2, dirMotor [LEFT_MOTOR]);
+  digitalWrite (DIR_2, dirMotor [RIGHT_MOTOR]);
   compassStep ();
 }
 
@@ -134,9 +134,9 @@ void runAll ()
 
 void tense () {
   stopAll ();
-  setMotor (LEFT_MOTOR,COUNTER_CLOCKWISE, TIME_TESTEPS, ON);
-  setMotor (RIGHT_MOTOR, CLOCKWISE, TIME_TESTEPS, ON);
-  testSteps = TEST_STEPS;
+  setMotor (LEFT_MOTOR,COUNTER_CLOCKWISE, LOOSE_TENSE_TIME_STEP, ON);
+  setMotor (RIGHT_MOTOR, CLOCKWISE, LOOSE_TENSE_TIME_STEP, ON);
+  testSteps = TENSE_LOOSE;
   while (testSteps > 0) {
     runAllTest ();
   }
@@ -145,9 +145,9 @@ void tense () {
 
 void loose () {
   stopAll ();
-  setMotor (LEFT_MOTOR,CLOCKWISE, TIME_TESTEPS, ON);
-  setMotor (RIGHT_MOTOR, COUNTER_CLOCKWISE, TIME_TESTEPS, ON);
-  testSteps = TEST_STEPS;
+  setMotor (LEFT_MOTOR,CLOCKWISE, LOOSE_TENSE_TIME_STEP, ON);
+  setMotor (RIGHT_MOTOR, COUNTER_CLOCKWISE, LOOSE_TENSE_TIME_STEP, ON);
+  testSteps = TENSE_LOOSE;
   while (testSteps > 0) {
     runAllTest ();
   }
