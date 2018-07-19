@@ -10,6 +10,7 @@ void setInitialConditions () {
   sensorTime = millis () + SENSOR_SAMPLE_TIME;
   lecture1 = 0;
   lecture2 = 1000;
+  runSample = micros ();
 }
 
 void testSequence () {
@@ -60,17 +61,6 @@ void testSequence () {
   }
   stopAll ();
   delay (IBWTT);
-}
-
-void shortestWayToSouth () {
-  diffference = 180 - heading;
-  if (diffference < 0) {
-    compassDirection = CLOCKWISE;
-  }
-  else {
-    compassDirection = COUNTER_CLOCKWISE;
-  }
-  degreesLeft = abs (diffference);
 }
 
 void setWorkingConditions () {
@@ -143,7 +133,7 @@ void calibrateCompassDisc () {
 
   setMotor (COMPASS_MOTOR, CLOCKWISE, WORK_TIME_STEP_COMPASS, ON);
   while (stepRegistry [COMPASS_MOTOR] != lastCalibrationCounter) {
-    
+
     runAll ();
   }
   Serial.print ("StepRegistry b ");
@@ -151,22 +141,26 @@ void calibrateCompassDisc () {
 
   calibrationCounter = abs (calibrationCounter);
   stepsPerDegree = calibrationCounter / 360;
-  
-  int needlePosition = 210;
+
+  needlePosition = 210;
   int initialDeviation = SOUTH_DEGREES - needlePosition;
 
-   if (initialDeviation < 0) {
+  if (initialDeviation < 0) {
     setMotor (COMPASS_MOTOR, COUNTER_CLOCKWISE, LOOKING_MAGNET_STEP_TIME, ON);
     lastCalibrationCounter = stepRegistry [COMPASS_MOTOR] + (initialDeviation * stepsPerDegree);
-   }
-   else {
+  }
+  else {
     setMotor (COMPASS_MOTOR, CLOCKWISE, LOOKING_MAGNET_STEP_TIME, ON);
-   }
+  }
 
   while (stepRegistry [COMPASS_MOTOR] != lastCalibrationCounter) {
-    
+
     runAll ();
   }
+  needlePosition = 180;
+  homeNeedle = stepRegistry [COMPASS_MOTOR];
+  printNeedleStart ();
+  delay (3000);
 
 
 }
@@ -179,11 +173,40 @@ void searchSouth () {
       stopSearch = 1;
     }
     else {
-      readAbsoluteOrientationSensor ();
-      shortestWayToSouth ();
-      motorDirective ();
+      if (timeNow > runSample) {
+        readAbsoluteOrientationSensor ();
+        shortestWayToSouth ();
+        motorDirective ();
+        compassFetch ();
+        printNeedle ();
+        runSample =  runSample + RUN_SAMPLE;
+      }
       runAll ();
     }
   }
+}
+
+void shortestWayToSouth () {
+  diffference = 180 - heading;
+  diferenccce = heading - needlePosition;
+  //////////////////////////////////////////change < if compass turns weird change first <
+  if (diferenccce > 0 && diferenccce < 180) {
+    compassDirection = COUNTER_CLOCKWISE;
+  }
+  else if (diferenccce > 181 && diferenccce -360) {
+    compassDirection = CLOCKWISE;
+  }
+  else if (diferenccce < 0 && diferenccce > -180) {
+    compassDirection = CLOCKWISE;
+  }
+  else if (diferenccce < -181 && diferenccce > -360) {
+    compassDirection = COUNTER_CLOCKWISE;
+  }
+degreesLeft = abs (diffference);
+}
+
+void compassFetch () {
+  needlePosition = abs ((180 + ((homeNeedle - stepRegistry [COMPASS_MOTOR]) / stepsPerDegree)) % 360);
+  compassDegreesLeft = abs (needlePosition - heading);
 }
 

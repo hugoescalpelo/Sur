@@ -23,16 +23,13 @@ void readAbsoluteOrientationSensor () {
     imu::Vector <3> euler = bno.getVector (Adafruit_BNO055::VECTOR_EULER);
     heading = euler.x ();
 
-    Serial.print ("X: ");
-    Serial.print (heading);
-    Serial.print ("\t\t");
 
     //Calibration routine
     uint8_t system, gyro, accel, mag = 0;
     bno.getCalibration (&system, &gyro, &accel, &mag);
-    Serial.print ("Mag= ");
-    Serial.println (mag, DEC);
+
     buffMag = mag;
+    //printABSensor ();
     AOSensorTime += BNO055_SAMPLERATE_DELAY_MS;
   }
 }

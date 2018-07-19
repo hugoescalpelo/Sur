@@ -25,6 +25,9 @@
    V0.7 Bluetooth Control
    V0.7.1 Bluetooth addons & Sensore lecture tested
    V0.7.2 Sensor sequence tested
+   V0.7.3 Steps per degrees value added
+   V0.7.4 Compass calibration tested
+   V0.8 Compass & reducers behaviour tested
 
    Team
    Iván Abreu Ochoa
@@ -57,14 +60,15 @@ const bool OFF = 0;
 const long TEST_STEPS = 1500;
 const int IBWTT = 250;//In Between Wait Test Time
 const long WORK_TIME_STEP_COMPASS = 3000; //uSeconds
-const long WORK_TIME_STEP = 900; //uSeconds
-const byte BASE_TH = 15; //Degrees
+const long WORK_TIME_STEP = 4000; //uSeconds
+const byte BASE_TH = 5; //Degrees
 const int PIN_S1 = A2;
 const int PIN_S2 = A3;
 const int HALL_DEBOUNCE = 100;
 const long SENSOR_SAMPLE_TIME = 200000;
 const long LOOKING_MAGNET_STEP_TIME = 11000;
 const int SOUTH_DEGREES = 180;
+const long RUN_SAMPLE = 50000;
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
@@ -101,6 +105,11 @@ String rValueBT;
 int buffBT;
 int buffMag;
 int stepsPerDegree;
+long runSample;
+int needlePosition;
+int homeNeedle;
+int compassDegreesLeft;
+int diferenccce;
 
 
 void setup() {
@@ -136,14 +145,6 @@ void setup() {
 
 void loop() {
 
-  /*re position this in an specific submenu}
-    readAbsoluteOrientationSensor ();
-    shortestWayToSouth ();
-    motorDirective ();
-    runAll ();
-
-  */
-
   //Bluetooth configuration service. A menu accesable theough serial BT
   //that determines on-off functions mainly. Also let you choose a
   //manual calibration, test sequence and independently confivurations
@@ -176,9 +177,10 @@ void loop() {
       Serial.println ("Calibrating Absolute Orientation Sensor");
       Serial2.println ("Calibrating Absolute Orientation Sensor");
       runUntilCalibrate ();
+      Serial.println (buffMag);
       clean ();
-      Serial.println ("Compass Absolute Orientation Sensor");
-      Serial2.println ("Compass Absolute Orientation Sensor");
+      Serial.println ("Compass Absolute Orientation Sensor calibrated");
+      Serial2.println ("Compass Absolute Orientation Sensor calibrated");
       break;
     case 4:
     Serial.println ("Calibrating compass");

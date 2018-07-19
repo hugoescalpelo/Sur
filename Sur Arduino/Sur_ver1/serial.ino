@@ -61,3 +61,30 @@ void printMenuBT () {
   delay (100);
 }
 
+void printABSensor () {
+  Serial.print ("X: ");
+  Serial.print (heading);
+  Serial.print ("\t\t");
+  Serial.print ("Mag= ");
+  Serial.println (buffMag, DEC);
+
+}
+
+void printNeedle () {
+  Serial.print ("H ");
+  Serial.print (heading);
+  Serial.print (" n ");
+  Serial.print (needlePosition);
+  Serial.print (" dL ");
+  Serial.print (compassDegreesLeft);
+  Serial.print (" r ");
+  Serial.println (stepRegistry [COMPASS_MOTOR]);
+}
+
+void printNeedleStart () {
+  Serial.print ("NeedlePosition ");
+  Serial.print (needlePosition);
+  Serial.print (" HomeNeedle ");
+  Serial.println (homeNeedle);
+}
+

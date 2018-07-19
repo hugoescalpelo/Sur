@@ -4,7 +4,7 @@ void setMotor (byte nMotor, bool bDir, long tStep, bool activeMotor) {
   stepMotorTime [nMotor] = tStep;
   runMotor [nMotor] = activeMotor;
   stepTimeTarget [nMotor] = tStep + micros ();
-  printMotorInitials (nMotor);
+  //printMotorInitials (nMotor);
 }
 
 void runAllTest ()
@@ -68,21 +68,25 @@ void motorDirective () {
   if (degreesLeft < threshold ) {
     closeEnoughLeft = OFF;
     closeEnoughRight = OFF;
-    closeEnoughCompass = ON;
   }
   else if (degreesLeft > threshold && diffference > 0) {
     closeEnoughLeft = ON;
     closeEnoughRight = ON;
-    closeEnoughCompass = ON;
     workingDirLeft = COUNTER_CLOCKWISE;
     workingDirRight = CLOCKWISE;
   }
   else if (degreesLeft > threshold && diffference < 0) {
     closeEnoughLeft = ON;
     closeEnoughRight = ON;
-    closeEnoughCompass = ON;
     workingDirLeft = CLOCKWISE;
     workingDirRight = COUNTER_CLOCKWISE;
+  }
+
+  if (compassDegreesLeft > threshold) {
+    closeEnoughCompass = ON;
+  }
+  else {
+    closeEnoughCompass = OFF;
   }
 
   setMotor (LEFT_MOTOR, workingDirLeft, workingMotorTimeStep, closeEnoughLeft);
