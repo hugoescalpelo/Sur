@@ -128,13 +128,6 @@ void setup() {
   setPinModes ();
   setInitialConditions ();
 
-  //Serial.println ("Test Started");
-  //testSequence ();
-  //Serial.println ("Test Finished");
-
-  //Wait for a recongizable number, only initialize when the
-  //expected number is received
-
   Serial.println ("Waiting Handshake");
   delay (100);
   Serial2.println ("Enter Handshake");

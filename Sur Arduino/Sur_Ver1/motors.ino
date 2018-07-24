@@ -69,17 +69,17 @@ void motorDirective () {
     closeEnoughLeft = OFF;
     closeEnoughRight = OFF;
   }
-  else if (degreesLeft > threshold && diffference > 0) {
-    closeEnoughLeft = ON;
-    closeEnoughRight = ON;
-    workingDirLeft = COUNTER_CLOCKWISE;
-    workingDirRight = CLOCKWISE;
-  }
   else if (degreesLeft > threshold && diffference < 0) {
     closeEnoughLeft = ON;
     closeEnoughRight = ON;
-    workingDirLeft = CLOCKWISE;
+    workingDirLeft = COUNTER_CLOCKWISE;
     workingDirRight = COUNTER_CLOCKWISE;
+  }
+  else if (degreesLeft > threshold && diffference > 0) {
+    closeEnoughLeft = ON;
+    closeEnoughRight = ON;
+    workingDirLeft = CLOCKWISE;
+    workingDirRight = CLOCKWISE;
   }
 
   if (compassDegreesLeft > threshold) {

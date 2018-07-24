@@ -142,7 +142,7 @@ void calibrateCompassDisc () {
   calibrationCounter = abs (calibrationCounter);
   stepsPerDegree = calibrationCounter / 360;
 
-  needlePosition = 210;
+  needlePosition = 204;
   int initialDeviation = SOUTH_DEGREES - needlePosition;
 
   if (initialDeviation < 0) {
@@ -212,7 +212,7 @@ void compassFetch () {
 }
 
 void speedGradient () {
-  workingMotorTimeStep = map (degreesLeft, -1, 361, 12000, 6000);
+  workingMotorTimeStep = map (degreesLeft, -1, 361, 1000, 500);
   workingCompassTimeStep = map (abs (diferenccce), -1, 361, 12000, 3000);  
 }
 
