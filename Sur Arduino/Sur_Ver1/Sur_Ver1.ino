@@ -1,7 +1,7 @@
 /*
    Ivan Abreu Studio.
 
-   19/07/2018
+   24/07/2018
 
    This code controls a set of 3 stepper motors, 2 of them are
    used to turn the head of the system host, the last one to
@@ -30,6 +30,7 @@
    V0.8 Compass & reducers behaviour tested. MPA reached
    V0.8.1 Gradient speed added
    V0.8.2 Loose-Tense sequence tested
+   V0.8.3 Orientation logic fixed
    
 
    Team
