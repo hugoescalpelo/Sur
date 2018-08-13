@@ -180,7 +180,7 @@ void searchSouth () {
         compassFetch ();
         speedGradient ();
         //printNeedle ();
-        runSample =  runSample + RUN_SAMPLE;
+        runSample += RUN_SAMPLE;
       }
       runAll ();
     }
@@ -213,6 +213,6 @@ void compassFetch () {
 
 void speedGradient () {
   workingMotorTimeStep = map (degreesLeft, -1, 361, 1000, 500);
-  workingCompassTimeStep = map (abs (diferenccce), -1, 361, 12000, 3000);  
+  workingCompassTimeStep = map (abs (diferenccce), -1, 91, 12000, 3000);  
 }
 
